@@ -7,10 +7,15 @@
 
 import SwiftUI
 
+// 撮影画面
 struct ImagePickerView: UIViewControllerRepresentable {
+    //  撮影画面の開閉状態を管理
     @Binding var isShowSheet: Bool
+    
+    //  撮影した写真を格納する変数
     @Binding var captureImage: UIImage?
     
+    //  コントローラのdelegateを管理
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         let parent: ImagePickerView
         
@@ -24,11 +29,10 @@ struct ImagePickerView: UIViewControllerRepresentable {
                     self.parent.captureImage = originalImage
                 }
             }
-            
-            
             parent.isShowSheet.toggle()
         }
         
+        //  キャンセルボタン押下時
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             parent.isShowSheet.toggle()
         }

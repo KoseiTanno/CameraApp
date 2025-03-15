@@ -8,8 +8,12 @@
 import SwiftUI
 import PhotosUI
 
+//  選択画面
 struct ContentView: View {
+    //  撮影した写真を格納する変数
     @State var captureImage: UIImage? = nil
+    
+    //  撮影画面の開閉状態を管理
     @State var isShowSheet = false
     @State var photoPickerSelectedImage: PhotosPickerItem? = nil
     
@@ -37,6 +41,7 @@ struct ContentView: View {
             .padding()
             
             .sheet(isPresented: $isShowSheet) {
+                //  撮影した写真がある時
                 if let captureImage {
                     EffectView(isShowSheet: $isShowSheet, captureImage: captureImage)
                 } else {
@@ -53,18 +58,22 @@ struct ContentView: View {
                     .padding()
             }
             
-            .onChange(of: photoPickerSelectedImage, initial: true, { oldValue, newValue in if let newValue {
-                Task {
-                    if let data = try? await newValue.loadTransferable(type: Data.self) {
-                        captureImage = UIImage(data: data)
-                    }
+            //  選択した写真情報をもとに写真を取り出す
+            .onChange(of: photoPickerSelectedImage, initial: true, { oldValue, newValue in
+                //  選択した写真がある場合
+                if let newValue {
+                    Task {
+                        if let data = try? await newValue.loadTransferable(type: Data.self) {
+                            captureImage = UIImage(data: data)
+                        }
                 }
             }})
             
         }
         
-        .onChange(of: captureImage, initial: true, { oldValue, newValue in if let _ = newValue {
-            isShowSheet.toggle()
+        .onChange(of: captureImage, initial: true, { oldValue, newValue in
+            if let _ = newValue {
+                isShowSheet.toggle()
         }})
     }
 }

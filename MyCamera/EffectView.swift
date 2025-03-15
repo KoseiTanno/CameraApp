@@ -7,11 +7,15 @@
 
 import SwiftUI
 
+//  エフェクト編集画面
 struct EffectView: View {
+    //  エフェクト編集画面の開閉状態を管理
     @Binding var isShowSheet: Bool
     
+    //  撮影した写真
     let captureImage: UIImage
     
+    //  表示する写真
     @State var showImage: UIImage?
     
     let filterArray = ["CIPhotoEffectMono",
@@ -39,6 +43,7 @@ struct EffectView: View {
             
             Spacer()
             
+            //  エフェクト適用ボタン
             Button {
                 let filterName = filterArray[filterSelectNumber]
                 
@@ -85,6 +90,7 @@ struct EffectView: View {
             }
             .padding()
             
+            //  シェア機能
             if let showImage {
                 let shareImage = Image(uiImage: showImage)
                 ShareLink(item: shareImage, subject: nil, message: nil, preview: SharePreview("Photo", image: shareImage)) {
